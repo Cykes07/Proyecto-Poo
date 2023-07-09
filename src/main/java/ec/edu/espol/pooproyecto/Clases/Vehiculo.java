@@ -3,7 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ec.edu.espol.pooproyecto.Clases;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -21,6 +24,7 @@ public class Vehiculo {
     private double precio;
     private Vendedor vendedor;
     private ArrayList<Oferta> ofertas;
+    public ArrayList<Vehiculo> vehiculos;
 
     public Vehiculo(String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio, Vendedor vendedor, ArrayList<Oferta> ofertas) {
         this.placa = placa;
@@ -36,5 +40,19 @@ public class Vehiculo {
         this.ofertas = ofertas;
     }
     
-    
+     public static String generarHash(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(input.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
+    }
 }

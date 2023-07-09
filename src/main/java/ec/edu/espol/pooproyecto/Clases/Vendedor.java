@@ -14,7 +14,6 @@ import java.util.Scanner;
  * @author arife
  */
 public class Vendedor extends Usuario {
-    private static ArrayList<String> correoVendedores;
     private ArrayList<Vehiculo> vehiculos;
 
     public Vendedor(String nombre, String apellido, String organizacion, String correo, String clave) {
@@ -22,14 +21,6 @@ public class Vendedor extends Usuario {
         this.vehiculos = new ArrayList<>();
     }
     
-    public boolean validarCorreo(String correo){
-        for(String c: correoVendedores){
-           if(c.equals(correo))
-               return true;
-        }
-        
-        return false;
-    }
     
        public static String generarHash(String input) {
         try {
@@ -46,10 +37,4 @@ public class Vendedor extends Usuario {
             return null;
         }
     }
-    
-    public void registrarNuevoVendedor(Scanner sc){
-        
-        
-    }
-
 }

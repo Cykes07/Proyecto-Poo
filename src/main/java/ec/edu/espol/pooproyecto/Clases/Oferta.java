@@ -18,6 +18,5 @@ public class Oferta{
         this.comprador = comprador;
         this.precio = precio;
     }
-
     
 }
