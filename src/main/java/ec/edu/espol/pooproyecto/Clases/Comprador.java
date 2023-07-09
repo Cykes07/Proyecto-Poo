@@ -16,5 +16,5 @@ public class Comprador extends Usuario{
     public Comprador(String nommbre, String apellido, String organizacion, String correo, String clave) {
         super(nommbre, apellido, organizacion, correo, clave);
     }
-
+//hola
 }
