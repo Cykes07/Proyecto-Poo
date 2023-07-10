@@ -4,9 +4,6 @@
  */
 package ec.edu.espol.pooproyecto.Clases;
 
-import static ec.edu.espol.pooproyecto.Clases.Comprador.generarHash;
-import static ec.edu.espol.pooproyecto.Clases.Vehiculo.generarHash;
-import static ec.edu.espol.pooproyecto.Clases.Vendedor.generarHash;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,22 +13,89 @@ import java.util.Scanner;
  */
 public class Sistema {
     private ArrayList<Vendedor> vendedores;
-    private ArrayList<String> correoVendedores;
-    private  ArrayList<String> correoComprador;
     private ArrayList<Comprador> compradores;
     private ArrayList<Oferta> ofertas;
+    private ArrayList<Vehiculo> vehiculos;
+    
+    public void menuOpciones(){
+        Scanner sc = new Scanner(System.in);
+        mostrarOpciones();
+        System.out.println("Escoge una opción: ");
+        int opcion = sc.nextInt();
+        switch(opcion){
+            case 1:
+                menuVendedor();             
+                //Menu vendedor
+            case 2: 
+                mostrarComprador();
+                //Menu Comprador
+            case 3:
+                break;
+        }
+    }
+    
+    public void menuVendedor(){
+        mostrarVendedor();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Escoge una opción: ");
+        int opcion = sc.nextInt();
+        switch(opcion){
+            case 1:
+                registrarNuevoVendedor();
+            case 2:
+                ingresarVehiculo();
+            case 3:
+                //aceptar oferta
+            case 4:
+                menuOpciones();
+        }
+    }
+    
+    public void menuComprador(){
+        mostrarComprador();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Escoge una opción: ");
+        int opcion = sc.nextInt();
+        switch(opcion){
+            case 1:
+                //registrar un nuevo comprador
+            case 2:
+                //ofertar por un vehiculo
+            case 3:
+                menuOpciones();
+        }
+    }
+    
+    public void mostrarOpciones(){
+        System.out.println("Menú Opciones: ");
+        System.out.println("1. Vendendor");
+        System.out.println("2. Comprador");
+        System.out.println("3. Salir");
+    }
+    
+    public void mostrarVendedor(){
+        System.out.println("1. Registrar un nuevo vendendor");
+        System.out.println("2. Registrar un nuevo vehículo");
+        System.out.println("3. Aceptar oferta");
+        System.out.println("4. Regresar");
+    }
+    
+    public void mostrarComprador(){
+        System.out.println("1. Registrar un nuevo comprador");
+        System.out.println("2. Ofertar por un vehículo");
+        System.out.println("3. Regresar");
+    }
     
     public boolean validarCorreo(String correo){
-        for(String c: correoVendedores){
-           if(c.equals(correo))
+        for(Vendedor vendedor: vendedores){
+           if(vendedor.correo.equals(correo))
                return true;
         }
-        
         return false;
     }
     
-     public void ingresarVehiculo(Scanner sc){
-        
+     public void ingresarVehiculo(){
+        Scanner sc = new Scanner(System.in);
         System.out.println("Ingresar correo electronico:  ");
         String correoU= sc.nextLine();
         boolean validacion= validarCorreo(correoU);
@@ -39,10 +103,15 @@ public class Sistema {
             System.out.println("Ingresar clave:  ");
             String claveU= sc.nextLine();
             String Hashu= Vehiculo.generarHash(claveU);
-        }
-        
+        }       
         System.out.println("Ingresar placa:  ");
         String placaU= sc.nextLine();
+        for (Vehiculo vehiculo: vehiculos){
+            if (vehiculo.placa.equals(placaU)){
+                System.out.println("Esta placa ya existe");
+                return;  
+            }
+        }
         System.out.println("Ingresar marca:  ");
         String marcaU= sc.nextLine();
         System.out.println("Ingresar modelo:  ");
@@ -58,12 +127,11 @@ public class Sistema {
         System.out.println("Ingresar tipo de combustible:  ");
         String combustibleU= sc.nextLine();
         System.out.println("Ingresar precio:  ");
-        double precioU= sc.nextDouble();
-        
+        double precioU= sc.nextDouble();        
     }
     
-    
-    public void registrarNuevoVendedor(Scanner sc){
+    public void registrarNuevoVendedor(){
+        Scanner sc = new Scanner(System.in);
         System.out.println("Ingresar nombre:  ");
         String nomb= sc.nextLine();
         System.out.println("Ingresar Apellido:  ");
@@ -78,11 +146,9 @@ public class Sistema {
             System.out.println("Correo ya existe");
             return;
         }
-        correoVendedores.add(corr);
-        
         System.out.println("Ingresar contrasena:  ");
         String contr= sc.nextLine();
-        String hashU= Vendedor.generarHash(contr);
+        String hashU= Usuario.generarHash(contr);
         
         vendedores.add( new Vendedor(nomb,ape,org,corr,hashU));
     }
@@ -102,11 +168,10 @@ public class Sistema {
             System.out.println("Correo ya existe");
             return;
         }
-        correoComprador.add(correoU);
         
         System.out.println("Ingresar contrasena:  ");
         String contrasenaU= sc.nextLine();
-        String hashU= Comprador.generarHash(contrasenaU);
+        String hashU= Usuario.generarHash(contrasenaU);
         
         compradores.add( new Comprador(nombreU,apellidoU,organizacionU,correoU,hashU));
     }

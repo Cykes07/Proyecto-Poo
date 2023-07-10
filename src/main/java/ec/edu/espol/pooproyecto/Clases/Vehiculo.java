@@ -13,7 +13,7 @@ import java.util.Scanner;
  * @author arife
  */
 public class Vehiculo {
-    private String placa;
+    protected String placa;
     private String marca;
     private String modelo;
     private String tipoMotor;
@@ -23,8 +23,6 @@ public class Vehiculo {
     private String tipoCombustible;
     private double precio;
     private Vendedor vendedor;
-    private ArrayList<Oferta> ofertas;
-    public ArrayList<Vehiculo> vehiculos;
 
     public Vehiculo(String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio, Vendedor vendedor, ArrayList<Oferta> ofertas) {
         this.placa = placa;
@@ -37,7 +35,6 @@ public class Vehiculo {
         this.tipoCombustible = tipoCombustible;
         this.precio = precio;
         this.vendedor = vendedor;
-        this.ofertas = ofertas;
     }
     
      public static String generarHash(String input) {

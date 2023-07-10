@@ -4,6 +4,9 @@
  */
 package ec.edu.espol.pooproyecto.Clases;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /**
  *
  * @author arife
@@ -12,7 +15,7 @@ public class Usuario {
     private String nombre;
     private String apellido;
     private String organizacion;
-    private String correo;
+    protected String correo;
     private String clave;
 
     public String getClave() {
@@ -22,12 +25,8 @@ public class Usuario {
     public void setClave(String clave) {
         this.clave = clave;
     }
-
     
-    
-    
-    
-    
+   
     public Usuario(String nombre, String apellido, String organizacion, String correo, String clave) {
         this.nombre = nombre;
         this.apellido = apellido;
@@ -36,4 +35,25 @@ public class Usuario {
         this.clave = clave;
     }
 
+       public static String generarHash(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(input.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+       
+    
 }
