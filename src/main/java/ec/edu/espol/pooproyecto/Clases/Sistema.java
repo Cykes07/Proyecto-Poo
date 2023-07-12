@@ -24,7 +24,7 @@ public class Sistema {
         this.vendedores = readFile("vendedores.txt");
         this.compradores = readFile2("compradores.txt");
         this.ofertas = new ArrayList<Oferta>();
-        this.vehiculos = new ArrayList<Vehiculo>();
+        this.vehiculos = readFile3("vehiculos.txt");
     }
     
     public void menuOpciones(){
@@ -96,10 +96,20 @@ public class Sistema {
         System.out.println("3. Regresar");
     }
     
-    public boolean validarCorreo(String correo){
-        for(Vendedor vendedor: vendedores){
-           if(vendedor.correo.equals(correo))
-               return true;
+    public boolean validarCorreo(String correo){ //Valida los correos de vendedores
+        for (Vendedor v: vendedores){   
+            if(v.getCorreo().equals(correo)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean validarClave(String correo, String clave){
+        for (Vendedor v: vendedores){   
+            if(v.getCorreo().equals(correo)){
+                return v.getClave().equals(clave);
+            }
         }
         return false;
     }
@@ -136,6 +146,23 @@ public class Sistema {
     return compradores;
     }
     
+    public ArrayList<Vehiculo> readFile3(String nomfile){
+    ArrayList<Vehiculo> vehiculos= new ArrayList<>();
+    try(Scanner sc= new Scanner(new File (nomfile))){
+        while(sc.hasNextLine()){
+            String linea = sc.nextLine();
+            String[] dato=linea.split("-");
+            Vehiculo c= new Vehiculo(dato[0]);
+            vehiculos.add(c);
+        }
+    } 
+    catch(Exception e){
+        System.out.println(e.getMessage());
+    }
+    return vehiculos;
+    }
+    
+    
     
     public void registrarVendedor(){
         Scanner sc= new Scanner(System.in);
@@ -151,12 +178,7 @@ public class Sistema {
         String hashU="";
         
        
-        boolean validacion= false;
-        for (Vendedor v: vendedores){   
-            if(v.getCorreo().equals(corU)){
-                validacion=true;
-            }
-        }      
+        boolean validacion= validarCorreo(corU);
         if(validacion){
             System.out.println("Correo ya registrado. Ingresar un correo nuevo.");
         }
@@ -164,9 +186,6 @@ public class Sistema {
             System.out.println("Ingresar contrasena:  ");
             contU= sc.nextLine();
             hashU= Usuario.generarHash(contU);
-            //correosVendedores.add(corU);
-            //Vendedor ven= new Vendedor(nomU,apeU,orgU,corU,hashU);
-            //vendedores.add(ven); 
         
             String rutaArchivo = "vendedores.txt";
 
@@ -183,8 +202,7 @@ public class Sistema {
     }
     
     public void nuevoVehiculoV(){
-        
-        
+            
         Scanner sc = new Scanner(System.in);
         System.out.println("Ingresar correo electronico:  ");
         String correoU= sc.nextLine();
@@ -192,76 +210,80 @@ public class Sistema {
         if (validacion){
             System.out.println("Ingresar clave:  ");
             String claveU= sc.nextLine();
-            String Hashu= Vehiculo.generarHash(claveU);
-        }     
-        
-        System.out.println("Que tipo de vehiculo va a ingresar? a.AUTO, b.CAMIONETA, c.MOTO ");
-        String tipo= sc.nextLine();
-        
-        System.out.println("Ingresar placa:  ");
-        String placaU= sc.nextLine();
-        for (Vehiculo vehiculo: vehiculos){
-            if (vehiculo.placa.equals(placaU)){
-                System.out.println("Esta placa ya existe");
-                return;  
-            }
-        }
-        System.out.println("Ingresar marca:  ");
-        String marcaU= sc.nextLine();
-        System.out.println("Ingresar modelo:  ");
-        String modeloU= sc.nextLine();
-        System.out.println("Ingresar tipo de motor:  ");
-        String motorU= sc.nextLine();
-        System.out.println("Ingresar año:  ");
-        int anioU= sc.nextInt();
-        System.out.println("Ingresar recorrido:  ");
-        int recorridoU= sc.nextInt();
-        System.out.println("Ingresar color:  ");
-        String colorU= sc.nextLine();
-        System.out.println("Ingresar tipo de combustible:  ");
-        String combustibleU= sc.nextLine();
-        System.out.println("Ingresar precio:  ");
-        double precioU= sc.nextDouble();     
-        
-        if(tipo.equals("a") || tipo.equals("b")){
-            System.out.println("El carro tiene vidrio? SI / NO:");
-            String vidU= sc.nextLine();
-            System.out.println("Ingrese la transmision:");
-            String tranU= sc.nextLine();
+            String hashu= Vehiculo.generarHash(claveU);
             
-            String rutaArchivo = "vehiculo.txt";
+            if(validarClave(correoU, hashu)){
+                System.out.println("Sesión activa");
+                System.out.println("Que tipo de vehiculo va a ingresar? a.AUTO, b.CAMIONETA, c.MOTO ");
+                String tipo= sc.nextLine();
 
-            try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
-            pw.println("AUTO-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU+"-"+vidU+"-"+tranU);
+                System.out.println("Ingresar placa:  ");
+                String placaU= sc.nextLine();
+                for (Vehiculo vehiculo: vehiculos){
+                    if (vehiculo.placa.equals(placaU)){
+                        System.out.println("Esta placa ya existe");
+                        return;  
+                    }
+                }
+                System.out.println("Ingresar marca:  ");
+                String marcaU= sc.nextLine();
+                System.out.println("Ingresar modelo:  ");
+                String modeloU= sc.nextLine();
+                System.out.println("Ingresar tipo de motor:  ");
+                String motorU= sc.nextLine();
+                System.out.println("Ingresar año:  ");
+                String anioU= sc.nextLine();
+                System.out.println("Ingresar recorrido:  ");
+                String recorridoU= sc.nextLine();
+                System.out.println("Ingresar color:  ");
+                String colorU= sc.nextLine();
+                System.out.println("Ingresar tipo de combustible:  ");
+                String combustibleU= sc.nextLine();
+                System.out.println("Ingresar precio:  ");
+                String precioU= sc.nextLine();     
+                String rutaArchivo = "vehiculo.txt";
+                
+                if(tipo.equals("a") || tipo.equals("b")){
+                    System.out.println("El vehiculo tiene vidrio? SI / NO:");
+                    String vidU= sc.nextLine();
+                    System.out.println("Escriba la transmisión:");
+                    String tranU= sc.nextLine();
+                    
+                    if (tipo.equals("a")){                    
+                        System.out.println("Paso el if");
+                    
+                        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
+                            pw.println("AUTO-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU+"-"+vidU+"-"+tranU);
+                            System.out.println("Funciona");
+                        }catch(Exception e){
+                            System.out.println(e.getMessage());
+                        }
+                    }    
 
-            }catch(Exception e){
-            System.out.println(e.getMessage());
-            }    
+                    else if(tipo.equals("b")){
+                        System.out.println("Ingrese la traccion:");
+                        String traccU= sc.nextLine();
+
+                        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
+                            pw.println("CAMIONETA-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU+"-"+vidU+"-"+tranU+"-"+traccU);
+
+                        }catch(Exception e){
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                }
             
-            if(tipo.equals("b")){
-                System.out.println("Ingrese la traccion:");
-                String traccU= sc.nextLine();
-   
-
                 try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
-                pw.println("CAMIONETA-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU+"-"+vidU+"-"+tranU+"-"+traccU);
+                pw.println("MOTO-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU);
 
                 }catch(Exception e){
-                System.out.println(e.getMessage());
-        }
+                    System.out.println(e.getMessage());
+                }
             }
-        
             
-        }
- 
-        String rutaArchivo = "vehiculo.txt";
-
-        try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
-        pw.println("MOTO-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU);
-
-        }catch(Exception e){
-        System.out.println(e.getMessage());
-        }
+        }     
+        
+        
     }
     
     
@@ -326,5 +348,20 @@ public class Sistema {
 //       :(
 //   }
     
-    
+    public void aceptarOferta(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Ingresar correo electronico:  ");
+        String correoU= sc.nextLine();
+        boolean validacion= validarCorreo(correoU);
+        if (validacion){
+            System.out.println("Ingresar clave:  ");
+            String claveU= sc.nextLine();
+            String hashu= Vehiculo.generarHash(claveU);
+            
+            if(validarClave(correoU, hashu)){
+                System.out.println("Sesión activa");
+                
+            }    
+        }    
+    }
 }

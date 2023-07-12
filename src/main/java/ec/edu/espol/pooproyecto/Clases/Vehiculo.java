@@ -17,14 +17,20 @@ public class Vehiculo {
     private String marca;
     private String modelo;
     private String tipoMotor;
-    private int anio;
-    private int recorrido;
+    private String anio;
+    private String recorrido;
     private String color;
     private String tipoCombustible;
-    private double precio;
+    private String precio;
     private Vendedor vendedor;
 
-    public Vehiculo(String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio) {
+    public Vehiculo(String placa) {
+        this.placa = placa;
+    }
+    
+    
+
+    public Vehiculo(String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, String precio) {
         this.placa = placa;
         this.marca = marca;
         this.modelo = modelo;

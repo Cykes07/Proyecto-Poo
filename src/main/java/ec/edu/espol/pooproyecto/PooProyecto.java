@@ -19,7 +19,7 @@ public class PooProyecto {
         Sistema s1= new Sistema();
         //s1.readFile("vendedores.txt");
         //s1.registrarVendedor();
-        s1.readFile2("compradores.txt");
-        s1.registrarComprador();
+//        s1.registrarVendedor();
+        s1.nuevoVehiculoV();
     }
 }
