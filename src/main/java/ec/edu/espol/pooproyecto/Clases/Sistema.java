@@ -4,6 +4,9 @@
  */
 package ec.edu.espol.pooproyecto.Clases;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,6 +19,13 @@ public class Sistema {
     private ArrayList<Comprador> compradores;
     private ArrayList<Oferta> ofertas;
     private ArrayList<Vehiculo> vehiculos;
+
+    public Sistema() {
+        this.vendedores = readFile("vendedores.txt");
+        this.compradores = readFile2("compradores.txt");
+        this.ofertas = new ArrayList<Oferta>();
+        this.vehiculos = new ArrayList<Vehiculo>();
+    }
     
     public void menuOpciones(){
         Scanner sc = new Scanner(System.in);
@@ -41,7 +51,7 @@ public class Sistema {
         int opcion = sc.nextInt();
         switch(opcion){
             case 1:
-                registrarNuevoVendedor();
+                registrarVendedor();
             case 2:
                 ingresarVehiculo();
             case 3:
@@ -129,51 +139,128 @@ public class Sistema {
         System.out.println("Ingresar precio:  ");
         double precioU= sc.nextDouble();        
     }
-    
-    public void registrarNuevoVendedor(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Ingresar nombre:  ");
-        String nomb= sc.nextLine();
-        System.out.println("Ingresar Apellido:  ");
-        String ape= sc.nextLine();
-        System.out.println("Ingresar organizacion:  ");
-        String org= sc.nextLine();
-        
-        System.out.println("Ingresar correo electronico:  ");
-        String corr= sc.nextLine();
-        boolean resp= validarCorreo(corr);
-        if (resp==true){
-            System.out.println("Correo ya existe");
-            return;
+     
+    public ArrayList<Vendedor> readFile(String nomfile){
+        ArrayList<Vendedor> vendedores= new ArrayList<>();
+        try(Scanner sc= new Scanner(new File (nomfile))){
+            while(sc.hasNextLine()){
+                String linea = sc.nextLine();
+                String[] dato=linea.split("-");
+                Vendedor v= new Vendedor(dato[0],dato[1],dato[2],dato[3],dato[4]);
+                vendedores.add(v);
+            }
+        } 
+        catch(Exception e){
+            System.out.println(e.getMessage());
         }
-        System.out.println("Ingresar contrasena:  ");
-        String contr= sc.nextLine();
-        String hashU= Usuario.generarHash(contr);
-        
-        vendedores.add( new Vendedor(nomb,ape,org,corr,hashU));
+        return vendedores;
     }
     
-    public void registrarNuevoComprador(Scanner sc){
-        System.out.println("Ingresar nombre:  ");
-        String nombreU= sc.nextLine();
-        System.out.println("Ingresar Apellido:  ");
-        String apellidoU= sc.nextLine();
-        System.out.println("Ingresar organizacion:  ");
-        String organizacionU= sc.nextLine();
+        public ArrayList<Comprador> readFile2(String nomfile){
+        ArrayList<Comprador> compradores= new ArrayList<>();
+        try(Scanner sc= new Scanner(new File (nomfile))){
+            while(sc.hasNextLine()){
+                String linea = sc.nextLine();
+                String[] dato=linea.split("-");
+                Comprador c= new Comprador(dato[0],dato[1],dato[2],dato[3],dato[4]);
+                compradores.add(c);
+            }
+        } 
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return compradores;
+    }
+    
+    
+    public void registrarVendedor(){
+        Scanner sc= new Scanner(System.in);
+        System.out.println("Ingrese Nombre:");
+        String nomU= sc.nextLine();
+        System.out.println("Ingrese Apellido:");
+        String apeU= sc.nextLine();
+        System.out.println("Ingrese organizacion:");
+        String orgU= sc.nextLine();
+        System.out.println("Ingrese correo:");
+        String corU= sc.nextLine();
+        String contU="";
+        String hashU="";
         
-        System.out.println("Ingresar correo electronico:  ");
-        String correoU= sc.nextLine();
-        boolean resp= validarCorreo(correoU);
-        if (resp==true){
-            System.out.println("Correo ya existe");
-            return;
+       
+        boolean validacion= false;
+        for (Vendedor v: vendedores){   
+            if(v.getCorreo().equals(corU)){
+                validacion=true;
+            }
+        }      
+        if(validacion){
+            System.out.println("Correo ya registrado. Ingresar un correo nuevo.");
+        }
+        else{
+            System.out.println("Ingresar contrasena:  ");
+            contU= sc.nextLine();
+            hashU= Usuario.generarHash(contU);
+            //correosVendedores.add(corU);
+            //Vendedor ven= new Vendedor(nomU,apeU,orgU,corU,hashU);
+            //vendedores.add(ven); 
+        
+            String rutaArchivo = "vendedores.txt";
+
+            try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
+            pw.println(nomU+"-"+apeU+"-"+orgU+"-"+corU+"-"+hashU);
+            
+            }catch(Exception e){
+            System.out.println(e.getMessage());
+            }
+        
+            System.out.println(nomU+"-"+apeU+"-"+orgU+"-"+corU+"-"+hashU);
         }
         
-        System.out.println("Ingresar contrasena:  ");
-        String contrasenaU= sc.nextLine();
-        String hashU= Usuario.generarHash(contrasenaU);
+    }
+    
+    public void registrarComprador(){
+        Scanner sc= new Scanner(System.in);
+        System.out.println("Ingrese Nombre:");
+        String nomU= sc.nextLine();
+        System.out.println("Ingrese Apellido:");
+        String apeU= sc.nextLine();
+        System.out.println("Ingrese organizacion:");
+        String orgU= sc.nextLine();
+        System.out.println("Ingrese correo:");
+        String corU= sc.nextLine();
+        String contU="";
+        String hashU="";
         
-        compradores.add( new Comprador(nombreU,apellidoU,organizacionU,correoU,hashU));
+       
+        boolean validacion= false;
+        for (Comprador c: compradores){   
+            if(c.getCorreo().equals(corU)){
+                validacion=true;
+            }
+        }      
+        if(validacion){
+            System.out.println("Correo ya registrado. Ingresar un correo nuevo.");
+        }
+        else{
+            System.out.println("Ingresar contrasena:  ");
+            contU= sc.nextLine();
+            hashU= Usuario.generarHash(contU);
+            //correosVendedores.add(corU);
+            //Vendedor ven= new Vendedor(nomU,apeU,orgU,corU,hashU);
+            //vendedores.add(ven); 
+        
+            String rutaArchivo = "compradores.txt";
+
+            try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
+            pw.println(nomU+"-"+apeU+"-"+orgU+"-"+corU+"-"+hashU);
+            
+            }catch(Exception e){
+            System.out.println(e.getMessage());
+            }
+        
+            System.out.println(nomU+"-"+apeU+"-"+orgU+"-"+corU+"-"+hashU);
+        }
+        
     }
     
 //    public void ofertarVehiculo(Scanner sc){
