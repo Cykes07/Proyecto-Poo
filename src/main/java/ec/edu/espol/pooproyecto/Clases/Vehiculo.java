@@ -24,7 +24,7 @@ public class Vehiculo {
     private double precio;
     private Vendedor vendedor;
 
-    public Vehiculo(String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio, Vendedor vendedor, ArrayList<Oferta> ofertas) {
+    public Vehiculo(String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio) {
         this.placa = placa;
         this.marca = marca;
         this.modelo = modelo;
@@ -34,7 +34,6 @@ public class Vehiculo {
         this.color = color;
         this.tipoCombustible = tipoCombustible;
         this.precio = precio;
-        this.vendedor = vendedor;
     }
     
      public static String generarHash(String input) {

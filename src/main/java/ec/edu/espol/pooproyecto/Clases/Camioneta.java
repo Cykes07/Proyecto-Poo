@@ -4,19 +4,24 @@
  */
 package ec.edu.espol.pooproyecto.Clases;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author arife
  */
-public class Camioneta {
+public class Camioneta extends Vehiculo{
     private String vidrio;
     private String transmision;
     private String traccion;
 
-    public Camioneta(String vidrio, String transmision, String traccion) {
+    public Camioneta(String placa, String marca, String modelo, String tipoMotor, int anio, int recorrido, String color, String tipoCombustible, double precio, String vidrio, String transmision, String traccion) {
+        super(placa, marca, modelo, tipoMotor, anio, recorrido, color, tipoCombustible, precio);
         this.vidrio = vidrio;
         this.transmision = transmision;
         this.traccion = traccion;
     }
+
+    
 
 }
