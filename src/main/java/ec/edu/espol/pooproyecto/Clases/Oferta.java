@@ -19,4 +19,9 @@ public class Oferta{
         this.precio = precio;
     }
     
+    @Override
+    public String toString(){
+        return "Correo: "+comprador.getCorreo()+"\n Precio ofertado: "+this.precio;  
+    }
+    
 }

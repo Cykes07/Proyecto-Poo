@@ -19,5 +19,6 @@ public class PooProyecto {
         //s1.registrarVendedor();
 //        s1.registrarVendedor();
         s1.nuevoVehiculoV();
+        
     }
 }

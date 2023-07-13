@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -21,10 +22,10 @@ public class Sistema {
     private ArrayList<Vehiculo> vehiculos;
 
     public Sistema() {
-        this.vendedores = readFile("vendedores.txt");
-        this.compradores = readFile2("compradores.txt");
-        this.ofertas = new ArrayList<Oferta>();
-        this.vehiculos = readFile3("vehiculo.txt");
+        this.vendedores = (ArrayList<Vendedor>) readFile("vendedores.txt","vendedor");
+        this.compradores = (ArrayList<Comprador>) readFile("compradores.txt","comprador");
+        this.ofertas = new ArrayList<>();
+        this.vehiculos = (ArrayList<Vehiculo>) readFile("vehiculo.txt","vehiculo");
     }
     
     public void menuOpciones(){
@@ -114,52 +115,59 @@ public class Sistema {
         return false;
     }
      
-    public ArrayList<Vendedor> readFile(String nomfile){
-        ArrayList<Vendedor> vendedores= new ArrayList<>();
-        try(Scanner sc= new Scanner(new File (nomfile))){
-            while(sc.hasNextLine()){
-                String linea = sc.nextLine();
-                String[] dato=linea.split("-");
-                Vendedor v= new Vendedor(dato[0],dato[1],dato[2],dato[3],dato[4]);
-                vendedores.add(v);
-            }
-        } 
-        catch(Exception e){
-            System.out.println(e.getMessage());
+    private ArrayList<?> readFile(String nomfile,String tipo){ //Dependiendo del tipo sale la lista que desea
+        ArrayList<?> lista = null;
+        try{
+        switch (tipo) {
+            case "vendedor" -> {
+                ArrayList<Vendedor> Sellers = new ArrayList<>();
+                try (Scanner vendedorScanner = new Scanner(new File(nomfile))) {
+                    while (vendedorScanner.hasNextLine()) {
+                        String linea = vendedorScanner.nextLine();
+                        String[] dato = linea.split("-");
+                        Vendedor v = new Vendedor(dato[0], dato[1], dato[2], dato[3], dato[4]);
+                        Sellers.add(v);
+                    }
+                }   lista = Sellers;
+                }
+            case "comprador" -> {
+                ArrayList<Comprador> buyers = new ArrayList<>();
+                try (Scanner compradorScanner = new Scanner(new File(nomfile))) {
+                    while (compradorScanner.hasNextLine()) {
+                        String linea = compradorScanner.nextLine();
+                        String[] dato = linea.split("-");
+                        Comprador c = new Comprador(dato[0], dato[1], dato[2], dato[3], dato[4]);
+                        buyers.add(c);
+                    }
+                }   lista = buyers;
+                }
+            case "vehiculo" -> {
+                ArrayList<Vehiculo> vehicles= new ArrayList<>();
+                try(Scanner sc= new Scanner(new File (nomfile))){
+                    while(sc.hasNextLine()){
+                        String linea = sc.nextLine();
+                        String[] d=linea.split("-");
+                        String type = d[0]; //Sacamos en el archivo tipo de vehiculo
+                        Vehiculo v; //Inicializamos aqui para acortar lineas
+                        switch (type) {
+                            case "AUTO" -> v = new Auto(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11]);
+                            case "CAMIONETA" -> v = new Camioneta(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11],d[12]);
+                            case "MOTO" -> v = new Vehiculo(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9]); //Este es moto
+                            default -> {
+                                continue; //Ignoramos lineas de tipos desconocidos
+                            }
+                        }
+                        vehicles.add(v);
+                    }
+                } lista = vehicles;
+                }
+            default -> System.out.println("Tipo inválido");
         }
-        return vendedores;
+    } catch (Exception e) {
+        System.out.println("Error al leer el archivo: " + e.getMessage());
+        lista = new ArrayList<>(); 
     }
-    
-    public ArrayList<Comprador> readFile2(String nomfile){
-    ArrayList<Comprador> compradores= new ArrayList<>();
-    try(Scanner sc= new Scanner(new File (nomfile))){
-        while(sc.hasNextLine()){
-            String linea = sc.nextLine();
-            String[] dato=linea.split("-");
-            Comprador c= new Comprador(dato[0],dato[1],dato[2],dato[3],dato[4]);
-            compradores.add(c);
-        }
-    } 
-    catch(Exception e){
-        System.out.println(e.getMessage());
-    }
-    return compradores;
-    }
-    
-    public ArrayList<Vehiculo> readFile3(String nomfile){
-    ArrayList<Vehiculo> vehiculos= new ArrayList<>();
-    try(Scanner sc= new Scanner(new File (nomfile))){
-        while(sc.hasNextLine()){
-            String linea = sc.nextLine();
-            String[] dato=linea.split("-");
-            Vehiculo c= new Vehiculo(dato[1]);
-            vehiculos.add(c);
-        }
-    } 
-    catch(Exception e){
-        System.out.println(e.getMessage());
-    }
-    return vehiculos;
+    return lista;
     }
     
     public void registrarVendedor(){
@@ -323,27 +331,48 @@ public class Sistema {
         
     }
  
-    public void ofertarVehiculo(Scanner sc){
+    public ArrayList<Vehiculo> filtarVehiculo(){
+       Scanner sc = new Scanner(System.in);
+       sc.useDelimiter("\n"); 
+       sc.useLocale(Locale.US);
        System.out.println("Ingresar tipo de vehiculo:  ");
        String tipoVEH= sc.nextLine();
        System.out.println("Ingresar recorrido desde:  ");
-       String recorridoDESDE= sc.nextLine();
+       String rmin = sc.nextLine();
+       int recorridoMin = rmin.isEmpty() ?  Integer.MIN_VALUE : Integer.parseInt(rmin);
        System.out.println(", hasta:  ");
-       String recorridoHASTA= sc.nextLine();
+       String rmax = sc.nextLine();
+       int recorridoMax = rmax.isEmpty() ?  Integer.MAX_VALUE : Integer.parseInt(rmax);
        System.out.println("Ingresar año desde:  ");
-       String anioDESDE= sc.nextLine();
+       String amin = sc.nextLine();
+       int anioMin = amin.isEmpty() ?  Integer.MIN_VALUE : Integer.parseInt(amin); //MAX VALUE es el mayor valor de double
        System.out.println(", hasta:  ");
-       String anioHASTA= sc.nextLine();
+       String amax = sc.nextLine();
+       int anioMax= amax.isEmpty() ?  Integer.MAX_VALUE : Integer.parseInt(amax); // MIN VALUE es el menor valor de double
        System.out.println("Ingresar precio desde:  ");
-       String precioDESDE= sc.nextLine();
+       String pmin = sc.nextLine();
+       double precioMin = pmin.isEmpty() ?  Double.MIN_VALUE : Double.parseDouble(pmin); // condicion ? valor si es true : valor si es false. 
        System.out.println(", hasta:  ");
-       String precioHASTA= sc.nextLine();
-       ArrayList<Vehiculo> vehiculoFiltrados = new ArrayList<>();
+       String pmax = sc.nextLine();
+       double precioMax = pmax.isEmpty() ?  Double.MAX_VALUE : Double.parseDouble(pmax); // condicion ? valor si es true : valor si es false.
+       ArrayList<Vehiculo> vehiculosFiltrados = new ArrayList<>();
        
-       for (Vehiculo v: vehiculos){
-           if(v[0].equals(tipoVEH)){
+       for (Vehiculo v: vehiculos){ //getSimpleName escribe el nombre de la clase y ignorecase hace equals sin importar mayus o minus
+           if(v.getClass().getSimpleName().equalsIgnoreCase(tipoVEH)&&  //Cada linea son el min y max 
+                   Integer.parseInt(v.getRecorrido()) >= recorridoMin && Integer.parseInt(v.getRecorrido()) <= recorridoMax 
+                   && Integer.parseInt(v.getAnio()) >= anioMin && Integer.parseInt(v.getAnio()) <= anioMax
+                   && Integer.parseInt(v.getPrecio()) >= precioMin && Integer.parseInt(v.getPrecio()) <= precioMax){
+                    vehiculosFiltrados.add(v);
+                    System.out.println(v);
+            }   
        }
+       return vehiculosFiltrados;
    }
+
+   
+    public void ofertarVehiculo (ArrayList<Vehiculo> v){  //La idea es que vaya mostrando en pantalla con indices los vehiculos, ya que que este debe volver
+        
+    }
     
     public void aceptarOferta(){
         Scanner sc = new Scanner(System.in);
@@ -357,7 +386,8 @@ public class Sistema {
             
             if(validarClave(correoU, hashu)){
                 System.out.println("Sesión activa");
-                
+                System.out.println("Ingrese la placa del vehículo: ");
+
             }    
         }    
     }

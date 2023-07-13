@@ -28,8 +28,6 @@ public class Vehiculo {
         this.placa = placa;
     }
     
-    
-
     public Vehiculo(String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, String precio) {
         this.placa = placa;
         this.marca = marca;
@@ -56,5 +54,50 @@ public class Vehiculo {
         } catch (NoSuchAlgorithmException e) {
             return null;
         }
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public String getTipoMotor() {
+        return tipoMotor;
+    }
+
+    public String getAnio() {
+        return anio;
+    }
+
+    public String getRecorrido() {
+        return recorrido;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getTipoCombustible() {
+        return tipoCombustible;
+    }
+
+    public String getPrecio() {
+        return precio;
+    }
+
+    public Vendedor getVendedor() {
+        return vendedor;
+    }
+     
+    @Override
+    public String toString(){
+        return this.marca+" "+this.modelo+" Precio: "+this.precio;
     }
 }
