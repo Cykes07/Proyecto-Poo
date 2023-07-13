@@ -24,7 +24,7 @@ public class Sistema {
         this.vendedores = readFile("vendedores.txt");
         this.compradores = readFile2("compradores.txt");
         this.ofertas = new ArrayList<Oferta>();
-        this.vehiculos = readFile3("vehiculos.txt");
+        this.vehiculos = readFile3("vehiculo.txt");
     }
     
     public void menuOpciones(){
@@ -152,7 +152,7 @@ public class Sistema {
         while(sc.hasNextLine()){
             String linea = sc.nextLine();
             String[] dato=linea.split("-");
-            Vehiculo c= new Vehiculo(dato[0]);
+            Vehiculo c= new Vehiculo(dato[1]);
             vehiculos.add(c);
         }
     } 
@@ -161,8 +161,6 @@ public class Sistema {
     }
     return vehiculos;
     }
-    
-    
     
     public void registrarVendedor(){
         Scanner sc= new Scanner(System.in);
@@ -250,11 +248,9 @@ public class Sistema {
                     String tranU= sc.nextLine();
                     
                     if (tipo.equals("a")){                    
-                        System.out.println("Paso el if");
                     
                         try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
-                            pw.println("AUTO-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU+"-"+vidU+"-"+tranU);
-                            System.out.println("Funciona");
+                            pw.println("AUTO-"+placaU+"-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU+"-"+vidU+"-"+tranU);
                         }catch(Exception e){
                             System.out.println(e.getMessage());
                         }
@@ -265,30 +261,28 @@ public class Sistema {
                         String traccU= sc.nextLine();
 
                         try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
-                            pw.println("CAMIONETA-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU+"-"+vidU+"-"+tranU+"-"+traccU);
+                            pw.println("CAMIONETA-"+placaU+"-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU+"-"+vidU+"-"+tranU+"-"+traccU);
 
                         }catch(Exception e){
                             System.out.println(e.getMessage());
                         }
                     }
-                }
+                }else{
             
-                try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
-                pw.println("MOTO-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU);
+                    try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
+                    pw.println("MOTO-"+placaU+"-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU);
 
-                }catch(Exception e){
-                    System.out.println(e.getMessage());
-                }
+                    }catch(Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                }    
             }
             
         }     
         
         
     }
-    
-    
-    
-    
+     
     public void registrarComprador(){
         Scanner sc= new Scanner(System.in);
         System.out.println("Ingrese Nombre:");
@@ -328,25 +322,28 @@ public class Sistema {
         }
         
     }
-
-    
-//    public void ofertarVehiculo(Scanner sc){
-//       System.out.println("Ingresar tipo de vehiculo:  ");
-//       String tipoOFER= sc.nextLine();
-//       System.out.println("Ingresar recorrido desde:  ");
-//       String recorridoDESDE= sc.nextLine();
-//       System.out.println(", hasta:  ");
-//       String recorridoHASTA= sc.nextLine();
-//       System.out.println("Ingresar año desde:  ");
-//       String anioDESDE= sc.nextLine();
-//       System.out.println(", hasta:  ");
-//       String anioHASTA= sc.nextLine();
-//       System.out.println("Ingresar precio desde:  ");
-//       String precioDESDE= sc.nextLine();
-//       System.out.println(", hasta:  ");
-//       String precioHASTA= sc.nextLine();
-//       :(
-//   }
+ 
+    public void ofertarVehiculo(Scanner sc){
+       System.out.println("Ingresar tipo de vehiculo:  ");
+       String tipoVEH= sc.nextLine();
+       System.out.println("Ingresar recorrido desde:  ");
+       String recorridoDESDE= sc.nextLine();
+       System.out.println(", hasta:  ");
+       String recorridoHASTA= sc.nextLine();
+       System.out.println("Ingresar año desde:  ");
+       String anioDESDE= sc.nextLine();
+       System.out.println(", hasta:  ");
+       String anioHASTA= sc.nextLine();
+       System.out.println("Ingresar precio desde:  ");
+       String precioDESDE= sc.nextLine();
+       System.out.println(", hasta:  ");
+       String precioHASTA= sc.nextLine();
+       ArrayList<Vehiculo> vehiculoFiltrados = new ArrayList<>();
+       
+       for (Vehiculo v: vehiculos){
+           if(v[0].equals(tipoVEH)){
+       }
+   }
     
     public void aceptarOferta(){
         Scanner sc = new Scanner(System.in);

@@ -9,5 +9,5 @@ package ec.edu.espol.pooproyecto.Clases;
  * @author mariu
  */
 public enum TipoVehiculo {
-    MOTO, CARRO, CAMIONETA;
+    MOTO, CARRO, CAMIONETA; //ESTO SE USA?
 }
