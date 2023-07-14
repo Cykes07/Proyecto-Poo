@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author arife
  */
-public class Camioneta extends Vehiculo{
+public class Camioneta extends Moto{
     private String vidrio;
     private String transmision;
     private String traccion;

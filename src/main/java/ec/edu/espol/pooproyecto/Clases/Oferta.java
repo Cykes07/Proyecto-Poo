@@ -9,11 +9,11 @@ package ec.edu.espol.pooproyecto.Clases;
  * @author arife
  */
 public class Oferta{
-    private Vehiculo vehiculo;
+    private Moto vehiculo;
     private Comprador comprador;
     private double precio;
 
-    public Oferta(Vehiculo vehiculo, Comprador comprador, double precio) {
+    public Oferta(Moto vehiculo, Comprador comprador, double precio) {
         this.vehiculo = vehiculo;
         this.comprador = comprador;
         this.precio = precio;

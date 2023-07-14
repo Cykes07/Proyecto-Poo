@@ -19,29 +19,30 @@ public class Sistema {
     private ArrayList<Vendedor> vendedores;
     private ArrayList<Comprador> compradores;
     private ArrayList<Oferta> ofertas;
-    private ArrayList<Vehiculo> vehiculos;
-    ArrayList<Vehiculo> vehiculosFiltrados;
-    private ArrayList<Vehiculo> vehiculos2;
+    private ArrayList<Moto> vehiculos;
+    ArrayList<Moto> vehiculosFiltrados;
+    private ArrayList<Moto> vehiculos2;
+    
 
     public Sistema() {
         this.vendedores = (ArrayList<Vendedor>) readFile("vendedores.txt","vendedor");
         this.compradores = (ArrayList<Comprador>) readFile("compradores.txt","comprador");
         this.ofertas = new ArrayList<>();
-        this.vehiculos = (ArrayList<Vehiculo>) readFile("vehiculo.txt","vehiculo");
+        this.vehiculos = (ArrayList<Moto>) readFile("vehiculo.txt","vehiculo");
         this.vehiculosFiltrados= new ArrayList<>();
-        this.vehiculos2=(ArrayList<Vehiculo>) readFile("vehiculo.txt","vehiculo");
+        this.vehiculos2=(ArrayList<Moto>) readFile("vehiculo.txt","vehiculo");
     }
     
     
     
-    public ArrayList<Vehiculo> readFile2(String nomfile){
+    public ArrayList<Moto> readFile2(String nomfile){
         nomfile="vehiculo.txt"; 
         try(Scanner sc= new Scanner(new File (nomfile))){
             while(sc.hasNextLine()){
                 String linea = sc.nextLine();
                 String[] d=linea.split("-");
                 String tippo=d[0];
-                Vehiculo p= new Vehiculo(d[0],d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8]);
+                Moto p= new Moto(d[0],d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8]);
                 vehiculos2.add(p);
             }
         } 
@@ -51,7 +52,7 @@ public class Sistema {
         return vehiculos2;
     }
     public void ayuda2(){
-        for(Vehiculo v: vehiculos2){
+        for(Moto v: vehiculos2){
             System.out.println(v.placa);
         }
     }
@@ -189,17 +190,17 @@ public class Sistema {
                 }   lista = buyers;
                 }
             case "vehiculo" -> {
-                ArrayList<Vehiculo> vehicles= new ArrayList<>();
+                ArrayList<Moto> vehicles= new ArrayList<>();
                 try(Scanner sc= new Scanner(new File (nomfile))){
                     while(sc.hasNextLine()){
                         String linea = sc.nextLine();
                         String[] d=linea.split("-");
                         String type = d[0]; //Sacamos en el archivo tipo de vehiculo
-                        Vehiculo v; //Inicializamos aqui para acortar lineas
+                        Moto v; //Inicializamos aqui para acortar lineas
                         switch (type) {
                             case "AUTO" -> v = new Auto(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11]);
                             case "CAMIONETA" -> v = new Camioneta(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11],d[12]);
-                            case "MOTO" -> v = new Vehiculo(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9]); //Este es moto
+                            case "MOTO" -> v = new Moto(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9]); //Este es moto
                             default -> {
                                 continue; //Ignoramos lineas de tipos desconocidos
                                
@@ -264,7 +265,7 @@ public class Sistema {
         if (validacion){
             System.out.println("Ingresar clave:  ");
             String claveU= sc.nextLine();
-            String hashu= Vehiculo.generarHash(claveU);
+            String hashu= Moto.generarHash(claveU);
             
             if(validarClave(correoU, hashu)){
                 System.out.println("Sesión activa");
@@ -273,7 +274,7 @@ public class Sistema {
 
                 System.out.println("Ingresar placa:  ");
                 String placaU= sc.nextLine();
-                for (Vehiculo v: vehiculos){
+                for (Moto v: vehiculos){
                     if (v.placa.equals(placaU)){
                         System.out.println("Esta placa ya existe");
                         return;  
@@ -391,7 +392,7 @@ public class Sistema {
         if (validacion){
             System.out.println("Ingresar clave:  ");
             String claveU= sc.nextLine();
-            String hashu= Vehiculo.generarHash(claveU);
+            String hashu= Moto.generarHash(claveU);
             
             if(validarClaveCOMPRADORES(correoU, hashu)){
                 System.out.println("Sesión activa");
@@ -416,29 +417,21 @@ public class Sistema {
                 String pmax = sc.nextLine();
                 double precioMax = pmax.isEmpty() ?  100000 : Double.parseDouble(pmax); // condicion ? valor si es true : valor si es false.
                 
-                for (Vehiculo v: vehiculos){ //getSimpleName escribe el nombre de la clase y ignorecase hace equals sin importar mayus o minus
-                    System.out.println("validacion 1");
-                    if( Integer.parseInt(v.getRecorrido()) >= recorridoMin && Integer.parseInt(v.getRecorrido()) <= recorridoMax &&  Integer.parseInt(v.getAnio()) >= anioMin && Integer.parseInt(v.getAnio()) <= anioMax && Integer.parseInt(v.getPrecio()) >= precioMin && Integer.parseInt(v.getPrecio()) <= precioMax)
-                    { 
-                        System.out.println("validacion 2");
+                for (Moto v: vehiculos){ //getSimpleName escribe el nombre de la clase y ignorecase hace equals sin importar mayus o minus
+                    System.out.println("---------"+v.getClass().getSimpleName().equalsIgnoreCase(tipoVEH));
+                    if( v.getClass().getSimpleName().equalsIgnoreCase(tipoVEH) && Integer.parseInt(v.getRecorrido()) >= recorridoMin && Integer.parseInt(v.getRecorrido()) <= recorridoMax &&  Integer.parseInt(v.getAnio()) >= anioMin && Integer.parseInt(v.getAnio()) <= anioMax && Integer.parseInt(v.getPrecio()) >= precioMin && Integer.parseInt(v.getPrecio()) <= precioMax)
                         vehiculosFiltrados.add(v);
-                        for(Vehiculo s:vehiculosFiltrados){
-                            System.out.println(s.placa);
-                            System.out.println("validacion 3");
-                        }
-                    }
                     else
                         System.out.println("NO DA LOS PARAMETROS");
                 }
-                
-                
+
                 int posicionActu= 0;
                 int numeral=1;
                 boolean continuar= true;
                 
                 System.out.println("\n VEHICULO QUE CUMPLEN CON LOS PARAMETROS: \n");
                 while(continuar){
-                    Vehiculo v = vehiculosFiltrados.get(posicionActu);
+                    Moto v = vehiculosFiltrados.get(posicionActu);
                     System.out.println("\nVehiculo #"+ numeral + " de "+vehiculosFiltrados.size());
        
                     System.out.println("Marca: "+ v.getMarca() +", modelo: "+ v.getModelo()+", precio: "+v.getPrecio()+"\n");
@@ -501,7 +494,7 @@ public class Sistema {
         if (validacion){
             System.out.println("Ingresar clave:  ");
             String claveU= sc.nextLine();
-            String hashu= Vehiculo.generarHash(claveU);
+            String hashu= Moto.generarHash(claveU);
             
             if(validarClave(correoU, hashu)){
                 System.out.println("Sesión activa");

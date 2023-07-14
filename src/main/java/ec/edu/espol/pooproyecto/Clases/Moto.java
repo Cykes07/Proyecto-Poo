@@ -12,7 +12,7 @@ import java.util.Scanner;
  *
  * @author arife
  */
-public class Vehiculo {
+public class Moto {
     protected String placa;
     private String marca;
     private String modelo;
@@ -24,11 +24,11 @@ public class Vehiculo {
     private String precio;
     private Vendedor vendedor;
 
-    public Vehiculo(String placa) {
+    public Moto(String placa) {
         this.placa = placa;
     }
     
-    public Vehiculo(String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, String precio) {
+    public Moto(String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, String precio) {
         this.placa = placa;
         this.marca = marca;
         this.modelo = modelo;
