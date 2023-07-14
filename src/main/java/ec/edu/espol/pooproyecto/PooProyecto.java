@@ -13,12 +13,13 @@ import ec.edu.espol.pooproyecto.Clases.Sistema;
 public class PooProyecto {
 
     public static void main(String[] args) {
-        
         Sistema s1= new Sistema();
-        //s1.readFile("vendedores.txt");
-        //s1.registrarVendedor();
-//        s1.registrarVendedor();
-        s1.nuevoVehiculoV();
+        //s1.registrarComprador();
+        s1.filtarVehiculo();
+
+
+        
+        
         
     }
 }

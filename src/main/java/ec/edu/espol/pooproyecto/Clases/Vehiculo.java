@@ -96,8 +96,4 @@ public class Vehiculo {
         return vendedor;
     }
      
-    @Override
-    public String toString(){
-        return this.marca+" "+this.modelo+" Precio: "+this.precio;
-    }
 }

@@ -20,13 +20,43 @@ public class Sistema {
     private ArrayList<Comprador> compradores;
     private ArrayList<Oferta> ofertas;
     private ArrayList<Vehiculo> vehiculos;
+    ArrayList<Vehiculo> vehiculosFiltrados;
+    private ArrayList<Vehiculo> vehiculos2;
 
     public Sistema() {
         this.vendedores = (ArrayList<Vendedor>) readFile("vendedores.txt","vendedor");
         this.compradores = (ArrayList<Comprador>) readFile("compradores.txt","comprador");
         this.ofertas = new ArrayList<>();
         this.vehiculos = (ArrayList<Vehiculo>) readFile("vehiculo.txt","vehiculo");
+        this.vehiculosFiltrados= new ArrayList<>();
+        this.vehiculos2=(ArrayList<Vehiculo>) readFile("vehiculo.txt","vehiculo");
     }
+    
+    
+    
+    public ArrayList<Vehiculo> readFile2(String nomfile){
+        nomfile="vehiculo.txt"; 
+        try(Scanner sc= new Scanner(new File (nomfile))){
+            while(sc.hasNextLine()){
+                String linea = sc.nextLine();
+                String[] d=linea.split("-");
+                String tippo=d[0];
+                Vehiculo p= new Vehiculo(d[0],d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8]);
+                vehiculos2.add(p);
+            }
+        } 
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return vehiculos2;
+    }
+    public void ayuda2(){
+        for(Vehiculo v: vehiculos2){
+            System.out.println(v.placa);
+        }
+    }
+    
+    
     
     public void menuOpciones(){
         Scanner sc = new Scanner(System.in);
@@ -106,6 +136,23 @@ public class Sistema {
         return false;
     }
     
+    public boolean validarCorreoCOMPRADORES(String correo){ //Valida los correos de vendedores
+        for (Comprador c: compradores){   
+            if(c.getCorreo().equals(correo)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean validarClaveCOMPRADORES(String correo, String clave){
+        for (Comprador c: compradores){   
+            if(c.getCorreo().equals(correo)){
+                return c.getClave().equals(clave);
+            }
+        }
+        return false;
+    }
     public boolean validarClave(String correo, String clave){
         for (Vendedor v: vendedores){   
             if(v.getCorreo().equals(correo)){
@@ -155,6 +202,7 @@ public class Sistema {
                             case "MOTO" -> v = new Vehiculo(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9]); //Este es moto
                             default -> {
                                 continue; //Ignoramos lineas de tipos desconocidos
+                               
                             }
                         }
                         vehicles.add(v);
@@ -169,7 +217,7 @@ public class Sistema {
     }
     return lista;
     }
-    
+
     public void registrarVendedor(){
         Scanner sc= new Scanner(System.in);
         System.out.println("Ingrese Nombre:");
@@ -225,8 +273,8 @@ public class Sistema {
 
                 System.out.println("Ingresar placa:  ");
                 String placaU= sc.nextLine();
-                for (Vehiculo vehiculo: vehiculos){
-                    if (vehiculo.placa.equals(placaU)){
+                for (Vehiculo v: vehiculos){
+                    if (v.placa.equals(placaU)){
                         System.out.println("Esta placa ya existe");
                         return;  
                     }
@@ -330,49 +378,120 @@ public class Sistema {
         }
         
     }
- 
-    public ArrayList<Vehiculo> filtarVehiculo(){
+    
+    public void filtarVehiculo(){
+
        Scanner sc = new Scanner(System.in);
        sc.useDelimiter("\n"); 
        sc.useLocale(Locale.US);
-       System.out.println("Ingresar tipo de vehiculo:  ");
-       String tipoVEH= sc.nextLine();
-       System.out.println("Ingresar recorrido desde:  ");
-       String rmin = sc.nextLine();
-       int recorridoMin = rmin.isEmpty() ?  Integer.MIN_VALUE : Integer.parseInt(rmin);
-       System.out.println(", hasta:  ");
-       String rmax = sc.nextLine();
-       int recorridoMax = rmax.isEmpty() ?  Integer.MAX_VALUE : Integer.parseInt(rmax);
-       System.out.println("Ingresar año desde:  ");
-       String amin = sc.nextLine();
-       int anioMin = amin.isEmpty() ?  Integer.MIN_VALUE : Integer.parseInt(amin); //MAX VALUE es el mayor valor de double
-       System.out.println(", hasta:  ");
-       String amax = sc.nextLine();
-       int anioMax= amax.isEmpty() ?  Integer.MAX_VALUE : Integer.parseInt(amax); // MIN VALUE es el menor valor de double
-       System.out.println("Ingresar precio desde:  ");
-       String pmin = sc.nextLine();
-       double precioMin = pmin.isEmpty() ?  Double.MIN_VALUE : Double.parseDouble(pmin); // condicion ? valor si es true : valor si es false. 
-       System.out.println(", hasta:  ");
-       String pmax = sc.nextLine();
-       double precioMax = pmax.isEmpty() ?  Double.MAX_VALUE : Double.parseDouble(pmax); // condicion ? valor si es true : valor si es false.
-       ArrayList<Vehiculo> vehiculosFiltrados = new ArrayList<>();
-       
-       for (Vehiculo v: vehiculos){ //getSimpleName escribe el nombre de la clase y ignorecase hace equals sin importar mayus o minus
-           if(v.getClass().getSimpleName().equalsIgnoreCase(tipoVEH)&&  //Cada linea son el min y max 
-                   Integer.parseInt(v.getRecorrido()) >= recorridoMin && Integer.parseInt(v.getRecorrido()) <= recorridoMax 
-                   && Integer.parseInt(v.getAnio()) >= anioMin && Integer.parseInt(v.getAnio()) <= anioMax
-                   && Integer.parseInt(v.getPrecio()) >= precioMin && Integer.parseInt(v.getPrecio()) <= precioMax){
-                    vehiculosFiltrados.add(v);
-                    System.out.println(v);
-            }   
-       }
-       return vehiculosFiltrados;
-   }
 
-   
-    public void ofertarVehiculo (ArrayList<Vehiculo> v){  //La idea es que vaya mostrando en pantalla con indices los vehiculos, ya que que este debe volver
-        
-    }
+        System.out.println("Ingresar correo electronico:  ");
+        String correoU= sc.nextLine();
+        boolean validacion= validarCorreoCOMPRADORES(correoU);
+        if (validacion){
+            System.out.println("Ingresar clave:  ");
+            String claveU= sc.nextLine();
+            String hashu= Vehiculo.generarHash(claveU);
+            
+            if(validarClaveCOMPRADORES(correoU, hashu)){
+                System.out.println("Sesión activa");
+                System.out.println("Ingresar tipo de vehiculo:  ");
+                String tipoVEH= sc.nextLine();
+                System.out.println("Ingresar recorrido desde:  ");
+                String rmin = sc.nextLine();
+                int recorridoMin = rmin.isEmpty() ?  0 : Integer.parseInt(rmin);
+                System.out.println(", hasta:  ");
+                String rmax = sc.nextLine();
+                int recorridoMax = rmax.isEmpty() ?  100000 : Integer.parseInt(rmax);
+                System.out.println("Ingresar año desde:  ");
+                String amin = sc.nextLine();
+                int anioMin = amin.isEmpty() ?  0 : Integer.parseInt(amin); //MAX VALUE es el mayor valor de double
+                System.out.println(", hasta:  ");
+                String amax = sc.nextLine();
+                int anioMax= amax.isEmpty() ?  100000 : Integer.parseInt(amax); // MIN VALUE es el menor valor de double
+                System.out.println("Ingresar precio desde:  ");
+                String pmin = sc.nextLine();
+                double precioMin = pmin.isEmpty() ?  0 : Double.parseDouble(pmin); // condicion ? valor si es true : valor si es false. 
+                System.out.println(", hasta:  ");
+                String pmax = sc.nextLine();
+                double precioMax = pmax.isEmpty() ?  100000 : Double.parseDouble(pmax); // condicion ? valor si es true : valor si es false.
+                
+                for (Vehiculo v: vehiculos){ //getSimpleName escribe el nombre de la clase y ignorecase hace equals sin importar mayus o minus
+                    System.out.println("validacion 1");
+                    if( Integer.parseInt(v.getRecorrido()) >= recorridoMin && Integer.parseInt(v.getRecorrido()) <= recorridoMax &&  Integer.parseInt(v.getAnio()) >= anioMin && Integer.parseInt(v.getAnio()) <= anioMax && Integer.parseInt(v.getPrecio()) >= precioMin && Integer.parseInt(v.getPrecio()) <= precioMax)
+                    { 
+                        System.out.println("validacion 2");
+                        vehiculosFiltrados.add(v);
+                        for(Vehiculo s:vehiculosFiltrados){
+                            System.out.println(s.placa);
+                            System.out.println("validacion 3");
+                        }
+                    }
+                    else
+                        System.out.println("NO DA LOS PARAMETROS");
+                }
+                
+                
+                int posicionActu= 0;
+                int numeral=1;
+                boolean continuar= true;
+                
+                System.out.println("\n VEHICULO QUE CUMPLEN CON LOS PARAMETROS: \n");
+                while(continuar){
+                    Vehiculo v = vehiculosFiltrados.get(posicionActu);
+                    System.out.println("\nVehiculo #"+ numeral + " de "+vehiculosFiltrados.size());
+       
+                    System.out.println("Marca: "+ v.getMarca() +", modelo: "+ v.getModelo()+", precio: "+v.getPrecio()+"\n");
+                    
+                    System.out.println("1. Siguiente vehiculo  \n2. Regresar   \n3. Realizar oferta  \nSeleccionar opcion (solo numero):");
+                    int opc= sc.nextInt();
+                    switch (opc) {
+                        case 1 -> {
+                            if(posicionActu<vehiculosFiltrados.size()-1){
+                                posicionActu++;
+                                numeral++;
+                            }
+                            else{
+                                System.out.println("-- Estas en el ultimo vehiculo --");
+                                
+                            }
+                        }
+                        case 2 -> {
+                            if(posicionActu>0){
+                                posicionActu--;
+                                numeral--;
+                            }
+                            else{
+                                System.out.println("-- Estas en el primer vehiculo --");
+                            }
+                        }
+                        case 3 -> {
+                            System.out.println("Insertar precio a oferta:");
+                            int precioOfertado= sc.nextInt();
+                            
+                            System.out.println("dddd");
+
+                            String rutaArchivo = "ofertas.txt";
+
+                            try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
+                                pw.println(v.getPlaca()+"-"+v.getMarca()+"-"+v.getModelo()+"-"+v.getPrecio()+"-"+correoU+"-"+precioOfertado);
+                            }catch(Exception e){
+                                System.out.println(e.getMessage());
+                            }
+                            
+                            continuar = false;
+                            System.out.println("\n Gracias por ofertar!! ");
+                        }
+                        default -> System.out.println("opcion incorrecta");
+                    }
+                }
+               }
+                else
+                    System.out.println("clave incorrecta");
+        }
+        else
+            System.out.println("correo incorrecto");
+   }
     
     public void aceptarOferta(){
         Scanner sc = new Scanner(System.in);

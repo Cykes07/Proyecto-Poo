@@ -25,6 +25,30 @@ public class Usuario {
     public void setClave(String clave) {
         this.clave = clave;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getOrganizacion() {
+        return organizacion;
+    }
+
+    public void setOrganizacion(String organizacion) {
+        this.organizacion = organizacion;
+    }
     
    
     public Usuario(String nombre, String apellido, String organizacion, String correo, String clave) {
