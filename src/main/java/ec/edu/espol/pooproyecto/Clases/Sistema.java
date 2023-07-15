@@ -51,14 +51,11 @@ public class Sistema {
         System.out.println("Escoge una opción: ");
         int opcion = sc.nextInt();
         switch(opcion){
-            case 1:
-                menuVendedor();             
-                //Menu vendedor
-            case 2: 
-                mostrarComprador();
-                //Menu Comprador
-            case 3:
-                break;
+            case 1 -> menuVendedor();
+            //Menu vendedor
+            case 2 -> menuComprador();
+            //Menu Comprador
+            case 3 -> System.out.println("Hasta luego");
         }
     }
     
@@ -73,7 +70,7 @@ public class Sistema {
             case 2:
                 nuevoVehiculoV();
             case 3:
-                //aceptar oferta
+                aceptarOferta();
             case 4:
                 menuOpciones();
         }

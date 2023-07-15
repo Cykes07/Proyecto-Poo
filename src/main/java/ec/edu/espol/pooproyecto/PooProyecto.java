@@ -16,7 +16,7 @@ public class PooProyecto {
         Sistema s1= new Sistema();
         //s1.registrarComprador();
         //s1.filtarVehiculo();
-
+        s1.menuOpciones();
 
         
         
