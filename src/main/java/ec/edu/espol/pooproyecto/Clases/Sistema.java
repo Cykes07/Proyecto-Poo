@@ -589,6 +589,8 @@ public class Sistema {
                 }
                 int posicionActu= 0;
                 int numeral=1;
+                int opc;
+                int valor;
                 boolean continuar= true;
                 
                 System.out.println("\nSe han realizado "+ vehiculosOfertados.size() +" ofertas");
@@ -600,11 +602,25 @@ public class Sistema {
                     System.out.println("\nOferta #"+ numeral + " de "+vehiculosOfertados.size()+"\n");
                            
                     System.out.println(o.marca +"  "+ o.modelo +"  Precio:"+ o.precio +"\nCorreo: "+ correoU +", Precio Ofertado: "+ o.precioOfertado+"\n");
-                    
-                    System.out.println("1. Siguiente oferta  \n2. Anterior oferta   \n3. Aceptar oferta  \nSeleccionar opcion (solo numero):");
-                    int opc= sc.nextInt();
-                    
-                    switch (opc) {
+                    if (posicionActu == 0){
+                        System.out.println("1. Siguiente oferta \n2. Aceptar oferta  \nSeleccionar opcion (solo numero):");
+                        opc= sc.nextInt();
+                        if (opc == 2)
+                            opc = 3;
+                    }else if(posicionActu == vehiculosOfertados.size()-1){
+                        System.out.println("1. Anterior oferta   \n2. Aceptar oferta  \nSeleccionar opcion (solo numero):");
+                        opc= sc.nextInt();
+                            if (opc == 1){
+                                opc = 2;
+                            }
+                            else if(opc ==2){
+                                opc = 3;
+                            }
+                    }else{
+                        System.out.println("1. Siguiente oferta  \n2. Anterior oferta   \n3. Aceptar oferta  \nSeleccionar opcion (solo numero):");
+                        opc= sc.nextInt();
+                    }
+                    switch (opc) { 
                         case 1 -> {
                             if(posicionActu<vehiculosOfertados.size()-1){
                                 posicionActu++;
