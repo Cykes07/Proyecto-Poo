@@ -79,8 +79,10 @@ public class Sistema {
         int opcion = sc.nextInt();
         switch(opcion){
             case 1:
+                registrarComprador();
                 //registrar un nuevo comprador
             case 2:
+                ofertarVehiculo();
                 //ofertar por un vehiculo
             case 3:
                 menuOpciones();
