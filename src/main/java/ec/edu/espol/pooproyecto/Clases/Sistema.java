@@ -14,7 +14,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.Scanner;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  *
@@ -188,9 +195,23 @@ public class Sistema {
                         vehicles.add(v);
                     }
                 } lista = vehicles;
+            }case "oferta" -> {
+                    ArrayList<Oferta> oferss= new ArrayList<>();
+                    try(Scanner sc= new Scanner(new File (nomfile))){
+                    while(sc.hasNextLine()){
+                        String linea = sc.nextLine();
+                        String[] d=linea.split("-");
+                        Oferta f = new Oferta(d[0],d[1],d[2],d[3],d[4],d[5]);
+                        
+                        oferss.add(f);
+                    }
+                } lista = oferss;
+                    
+                    
             }
             default -> System.out.println("Tipo inválido");
         }
+
     } catch (Exception e) {
         System.out.println("Error al leer el archivo: " + e.getMessage());
         lista = new ArrayList<>(); 
@@ -512,8 +533,41 @@ public class Sistema {
         }
     }
    
+    private static void enviarConGMail(String destinatario, String asunto, String cuerpo) {
+        //La dirección de correo de envío
+            String remitente = "chicotabletpoo@gmail.com";
+        //La clave de aplicación obtenida según se explica en este artículo:
+        String claveemail = "chrjuiqzxztvionz";
+
+        Properties props = System.getProperties();
+        props.put("mail.smtp.host", "smtp.gmail.com");  //El servidor SMTP de Google
+        props.put("mail.smtp.user", remitente);
+        props.put("mail.smtp.clave", claveemail);    //La clave de la cuenta
+        props.put("mail.smtp.auth", "true");    //Usar autenticación mediante usuario y clave
+        props.put("mail.smtp.starttls.enable", "true"); //Para conectar de manera segura al servidor SMTP
+        props.put("mail.smtp.port", "587"); //El puerto SMTP seguro de Google
+
+        Session session = Session.getDefaultInstance(props);
+        MimeMessage message = new MimeMessage(session);
+
+        try {
+            message.setFrom(new InternetAddress(remitente));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));   //Se podrían añadir varios de la misma manera
+            message.setSubject(asunto);
+            message.setText(cuerpo);
+                try (Transport transport = session.getTransport("smtp")) {
+                    transport.connect("smtp.gmail.com", remitente, claveemail);
+                    transport.sendMessage(message, message.getAllRecipients());
+                }
+        }
+        catch (MessagingException me) {
+            me.printStackTrace();   //Si se produce un error
+        }
+    }
+    
     public void aceptarOferta(){
         Scanner sc = new Scanner(System.in);
+        sc.useDelimiter("\n"); 
         System.out.println("Ingresar correo electronico:  ");
         String correoU= sc.nextLine();
         boolean validacion= validarCorreo(correoU,"vendedor");
@@ -543,6 +597,7 @@ public class Sistema {
                 System.out.println("\nSe han realizado "+ vehiculosOfertados.size() +" ofertas");
                 
                 while(continuar){
+                    sc.useDelimiter("\n"); 
                     Oferta o = vehiculosOfertados.get(posicionActu);
                     
                     System.out.println("\nOferta #"+ numeral + " de "+vehiculosOfertados.size()+"\n");
@@ -573,11 +628,15 @@ public class Sistema {
                             }
                         }
                         case 3 -> {
+                            String destinatario = o.correo; //A quien le quieres escribir.
+                            String asunto = "Oferta aceptada!";    
+                            String cuerpo = "La oferta del carro con la placa " + o.placa + " fue aceptada";
+                            enviarConGMail(destinatario, asunto, cuerpo);
+                            
                             eliminarLineas("ofertas.txt",o.placa);
                             eliminarLineas("vehiculo.txt",o.placa);
- 
                             continuar = false;
-                            System.out.println("\nOferta aceptada!! ");
+                            System.out.println("Oferta aceptada!! ");
                                 
                         }
                         default -> System.out.println("opcion incorrecta");
