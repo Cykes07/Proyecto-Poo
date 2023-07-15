@@ -9,19 +9,19 @@ package ec.edu.espol.pooproyecto.Clases;
  * @author arife
  */
 public class Oferta{
-    private Moto vehiculo;
-    private Comprador comprador;
-    private double precio;
+    String placa;
+    String marca;
+    String modelo;
+    String precio;
+    String correo;
+    String precioOfertado;
 
-    public Oferta(Moto vehiculo, Comprador comprador, double precio) {
-        this.vehiculo = vehiculo;
-        this.comprador = comprador;
+    public Oferta(String placa, String marca, String modelo, String precio, String correo, String precioOfertado) {
+        this.placa = placa;
+        this.marca = marca;
+        this.modelo = modelo;
         this.precio = precio;
+        this.correo = correo;
+        this.precioOfertado = precioOfertado;
     }
-    
-    @Override
-    public String toString(){
-        return "Correo: "+comprador.getCorreo()+"\n Precio ofertado: "+this.precio;  
-    }
-    
 }

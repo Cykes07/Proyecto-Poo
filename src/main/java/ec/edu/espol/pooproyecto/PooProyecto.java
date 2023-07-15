@@ -15,7 +15,7 @@ public class PooProyecto {
     public static void main(String[] args) {
         Sistema s1= new Sistema();
         //s1.registrarComprador();
-        s1.filtarVehiculo();
+        //s1.filtarVehiculo();
 
 
         

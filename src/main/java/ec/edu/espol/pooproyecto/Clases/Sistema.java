@@ -4,8 +4,13 @@
  */
 package ec.edu.espol.pooproyecto.Clases;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -13,21 +18,24 @@ import java.util.Scanner;
 
 /**
  *
- * @author mariu
+ * @author 
  */
 public class Sistema {
     private ArrayList<Vendedor> vendedores;
     private ArrayList<Comprador> compradores;
     private ArrayList<Oferta> ofertas;
     private ArrayList<Moto> vehiculos;
-    private ArrayList<Moto> vehiculos2;
-    
+    private ArrayList<Oferta> vehiculosOfertados;
+    private ArrayList<Moto> vehiculosFiltrados;
+
 
     public Sistema() {
         this.vendedores = (ArrayList<Vendedor>) readFile("vendedores.txt","vendedor");
         this.compradores = (ArrayList<Comprador>) readFile("compradores.txt","comprador");
-        this.ofertas = new ArrayList<>();
+        this.ofertas = (ArrayList<Oferta>) readFile("ofertas.txt","oferta");
         this.vehiculos = (ArrayList<Moto>) readFile("vehiculo.txt","vehiculo");
+        this.vehiculosFiltrados= new ArrayList<>();
+        this.vehiculosOfertados= new ArrayList<>();
     }
     
     public void menuOpciones(){
@@ -186,6 +194,31 @@ public class Sistema {
         lista = new ArrayList<>(); 
     }
     return lista;
+    }
+    
+    public static void eliminarLineas(String nombreArchivo, String textoEliminar) {
+        File archivo = new File(nombreArchivo);
+        File archivoTemporal = new File("temp.txt");
+
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo));
+             BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTemporal))) {
+
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                if (!linea.contains(textoEliminar)) {
+                    bw.write(linea);
+                    bw.newLine();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Elimina el archivo original
+        archivo.delete();
+
+        // Renombra el archivo temporal al nombre original
+        archivoTemporal.renameTo(archivo);
     }
     
     public void registrarVendedor(){
@@ -410,7 +443,7 @@ public class Sistema {
             String hashu= Moto.generarHash(claveU);
             
             if(validarClave(correoU, hashu,"comprador")){
-                ArrayList <Moto> vehiculosFiltrados = filtarVehiculo();
+                vehiculosFiltrados = filtarVehiculo();
                 if (vehiculosFiltrados.isEmpty()) { //Verificamos la lista si esta vacia
                     System.out.println("No se encontraron vehículos con los criterios de búsqueda ingresados.");
                     return;
@@ -476,24 +509,83 @@ public class Sistema {
             }
         }
     }
-    
-    
-    
+   
     public void aceptarOferta(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Ingresar correo electronico:  ");
         String correoU= sc.nextLine();
-        boolean validacion= validarCorreo(correoU,"vendendor");
+        boolean validacion= validarCorreo(correoU,"vendedor");
         if (validacion){
             System.out.println("Ingresar clave:  ");
             String claveU= sc.nextLine();
             String hashu= Moto.generarHash(claveU);
             
-            if(validarClave(correoU, hashu, "comprador")){
+            if(validarClave(correoU, hashu, "vendedor")){
                 System.out.println("Sesión activa");
                 System.out.println("Ingrese la placa del vehículo: ");
-
+                String placaBus= sc.nextLine();
+                
+                for (Oferta o: ofertas){
+                    if(o.placa.equals(placaBus)){
+                        vehiculosOfertados.add(o);
+                    }
+                }
+                if (vehiculosOfertados.isEmpty()) {
+                    System.out.println("No se encontraron ofertas con la placa ingresada.");
+                    return;
+                }
+                int posicionActu= 0;
+                int numeral=1;
+                boolean continuar= true;
+                
+                System.out.println("\nSe han realizado "+ vehiculosOfertados.size() +" ofertas");
+                
+                while(continuar){
+                    Oferta o = vehiculosOfertados.get(posicionActu);
+                    
+                    System.out.println("\nOferta #"+ numeral + " de "+vehiculosOfertados.size()+"\n");
+                           
+                    System.out.println(o.marca +"  "+ o.modelo +"  Precio:"+ o.precio +"\nCorreo: "+ correoU +", Precio Ofertado: "+ o.precioOfertado+"\n");
+                    
+                    System.out.println("1. Siguiente oferta  \n2. Anterior oferta   \n3. Aceptar oferta  \nSeleccionar opcion (solo numero):");
+                    int opc= sc.nextInt();
+                    
+                    switch (opc) {
+                        case 1 -> {
+                            if(posicionActu<vehiculosOfertados.size()-1){
+                                posicionActu++;
+                                numeral++;
+                            }
+                            else{
+                                System.out.println("-- Estas en el ultimo vehiculo --");
+                                
+                            }
+                        }
+                        case 2 -> {
+                            if(posicionActu>0){
+                                posicionActu--;
+                                numeral--;
+                            }
+                            else{
+                                System.out.println("-- Estas en el primer vehiculo --");
+                            }
+                        }
+                        case 3 -> {
+                            eliminarLineas("ofertas.txt",o.placa);
+                            eliminarLineas("vehiculo.txt",o.placa);
+ 
+                            continuar = false;
+                            System.out.println("\nOferta aceptada!! ");
+                                
+                        }
+                        default -> System.out.println("opcion incorrecta");
+                    }
+                }
+            }else{
+                System.out.println("Clave incorrecta");
             }    
+        }else{
+            System.out.println("Correo no registrado");
         }    
     }
 }
