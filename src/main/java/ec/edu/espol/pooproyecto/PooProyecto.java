@@ -5,6 +5,7 @@
 package ec.edu.espol.pooproyecto;
 
 import ec.edu.espol.pooproyecto.Clases.Sistema;
+import java.util.Scanner;
 
 /**
  *

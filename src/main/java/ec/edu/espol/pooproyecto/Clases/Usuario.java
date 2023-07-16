@@ -6,12 +6,13 @@ package ec.edu.espol.pooproyecto.Clases;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 /**
  *
  * @author arife
  */
-public class Usuario {
+public abstract class Usuario {
     private String nombre;
     private String apellido;
     private String organizacion;
@@ -49,7 +50,13 @@ public class Usuario {
     public void setOrganizacion(String organizacion) {
         this.organizacion = organizacion;
     }
-    
+    public Usuario(){  
+        this.nombre = "";
+        this.apellido = "";
+        this.organizacion = "";
+        this.correo = "";
+        this.clave = "";
+    }
    
     public Usuario(String nombre, String apellido, String organizacion, String correo, String clave) {
         this.nombre = nombre;
@@ -78,6 +85,10 @@ public class Usuario {
     public String getCorreo() {
         return correo;
     }
+    
+    public abstract ArrayList<?> readFile(String nomfile);
+    public abstract boolean validarCorreo(String correo);
+    public abstract boolean validarClave(String correo,String clave);
        
     
 }
