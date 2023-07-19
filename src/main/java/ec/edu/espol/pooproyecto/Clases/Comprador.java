@@ -148,11 +148,13 @@ public class Comprador extends Usuario{
                             }
                         }
                         case 3 -> {
+                            String rutaArchivo = "ofertas.txt";
                             Vehiculo v = vehiculosFiltrados.get(indice);
                             System.out.println("Insertar precio a oferta:");
-                            int precioOfertado= sc.nextInt();
+                            sc.nextLine();
+                            String precioOfertado= sc.nextLine();
 
-                            String rutaArchivo = "ofertas.txt";
+                            
 
                             try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
                                 pw.println(v.getPlaca()+"-"+v.getMarca()+"-"+v.getModelo()+"-"+v.getPrecio()+"-"+correoU+"-"+precioOfertado);
@@ -161,7 +163,7 @@ public class Comprador extends Usuario{
                                 }
 
 
-                           System.out.println("\n Gracias por ofertar!! ");
+                           System.out.println(" Gracias por ofertar!! ");
                            opcion = 4;
 
                         }
