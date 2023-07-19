@@ -4,24 +4,8 @@
  */
 package ec.edu.espol.pooproyecto.Clases;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Properties;
 import java.util.Scanner;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 /**
  *
@@ -41,51 +25,74 @@ public class Sistema {
         this.vendedores = new ArrayList<>();
         this.vendedor = new Vendedor();
         this.comprador = new Comprador();
-//        this.ofertas = (ArrayList<Oferta>) readFile("ofertas.txt","oferta");
-//        this.vehiculos = (ArrayList<Moto>) readFile("vehiculo.txt","vehiculo");
         this.vehiculosFiltrados= new ArrayList<>();
         this.vehiculosOfertados= new ArrayList<>();
     }
     
-    public void menuOpciones(){
+    public void menuOpciones() {
         Scanner sc = new Scanner(System.in);
-        mostrarOpciones();
-        System.out.println("Escoge una opción: ");
-        int opcion = sc.nextInt();
-        switch(opcion){
-            case 1 -> menuVendedor();
-            //Menu vendedor
-            case 2 -> menuComprador();
-            //Menu Comprador
-            case 3 -> System.out.println("Hasta luego");
-        }
+        int opcion;
+        do {
+            mostrarOpciones();
+            System.out.println("Escoge una opción: ");
+            opcion = sc.nextInt();
+            switch (opcion) {
+                case 1:
+                    menuVendedor();
+                    break;
+                case 2:
+                    menuComprador();
+                    break;
+                case 3:
+                    System.out.println("Hasta luego");
+                    break;
+                default:
+                    System.out.println("Opción inválida");
+            }
+        } while (opcion != 3);
     }
     
-    public void menuVendedor(){
+   public void menuVendedor() {
         mostrarVendedor();
         Scanner sc = new Scanner(System.in);
         System.out.println("Escoge una opción: ");
-        int opcion = sc.nextInt();
-        switch(opcion){
-            case 1 -> vendedor.registrarVendedor();
-            case 2 -> vendedor.nuevoVehiculoV();
-            case 3 -> vendedor.aceptarOferta();
-            case 4 -> menuOpciones();
+        int opc = sc.nextInt();
+        switch (opc) {
+            case 1:
+                vendedor.registrarVendedor();
+                break;
+            case 2:
+                vendedor.nuevoVehiculoV();
+                break;
+            case 3:
+                vendedor.aceptarOferta();
+                break;
+            case 4:
+                
+                break;
+            default:
+                System.out.println("Opción inválida");
         }
     }
-    
-    public void menuComprador(){
+
+    public void menuComprador() {
         mostrarComprador();
         Scanner sc = new Scanner(System.in);
         System.out.println("Escoge una opción: ");
-        int opcion = sc.nextInt();
-        switch(opcion){
-            case 1 -> comprador.registrarComprador();
-            case 2 -> comprador.ofertarVehiculo();
-            case 3 -> menuOpciones();
+        int op = sc.nextInt();
+        switch (op) {
+            case 1:
+                comprador.registrarComprador();
+                break;
+            case 2:
+                comprador.ofertarVehiculo();
+                break;
+            case 3:
+           
+                break;
+            default:
+                System.out.println("Opción inválida");
         }
-        //registrar un nuevo comprador
-        //ofertar por un vehiculo
     }
     
     public void mostrarOpciones(){
