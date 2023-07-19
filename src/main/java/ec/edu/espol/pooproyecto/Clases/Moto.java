@@ -12,8 +12,8 @@ import java.util.ArrayList;
  */
 public class Moto extends Vehiculo{
 
-    public Moto(String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, String precio) {
-        super(placa, marca, modelo, tipoMotor, anio, recorrido, color, tipoCombustible, precio);
+    public Moto(String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, String precio,String correoVendedor) {
+        super(placa, marca, modelo, tipoMotor, anio, recorrido, color, tipoCombustible, precio, correoVendedor);
     }
 
 

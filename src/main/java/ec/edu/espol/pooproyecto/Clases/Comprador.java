@@ -98,7 +98,7 @@ public class Comprador extends Usuario{
         
     }
    
-    public void ofertarVehiculo (){  //La idea es que vaya mostrando en pantalla con indices los vehiculos, ya que que este debe volver
+    public void ofertarVehiculo (){  
         Scanner sc =new Scanner(System.in);
         sc.useDelimiter("\n"); 
         System.out.println("Ingresar correo electronico:  ");

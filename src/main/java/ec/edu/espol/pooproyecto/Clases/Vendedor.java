@@ -165,7 +165,7 @@ public class Vendedor extends Usuario {
                     if (tipo.equals("a")){                    
                     
                         try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
-                            pw.println("AUTO-"+placaU+"-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU+"-"+vidU+"-"+tranU);
+                            pw.println("AUTO-"+placaU+"-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU+"-"+vidU+"-"+tranU+"-"+correoU);
                         }catch(Exception e){
                             System.out.println(e.getMessage());
                         }
@@ -176,7 +176,7 @@ public class Vendedor extends Usuario {
                         String traccU= sc.nextLine();
 
                         try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
-                            pw.println("CAMIONETA-"+placaU+"-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU+"-"+vidU+"-"+tranU+"-"+traccU);
+                            pw.println("CAMIONETA-"+placaU+"-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU+"-"+vidU+"-"+tranU+"-"+traccU+"-"+correoU);
 
                         }catch(Exception e){
                             System.out.println(e.getMessage());
@@ -185,7 +185,7 @@ public class Vendedor extends Usuario {
                 }else{
             
                     try(PrintWriter pw = new PrintWriter(new FileOutputStream(new File(rutaArchivo), true))){
-                    pw.println("MOTO-"+placaU+"-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU);
+                    pw.println("MOTO-"+placaU+"-"+marcaU+"-"+modeloU+"-"+motorU+"-"+anioU+"-"+recorridoU+"-"+colorU+"-"+combustibleU+"-"+precioU+"-"+correoU);
 
                     }catch(Exception e){
                         System.out.println(e.getMessage());
@@ -193,7 +193,7 @@ public class Vendedor extends Usuario {
                 }    
             }
             
-        }     
+        }  
         
         
     }
@@ -228,70 +228,63 @@ public class Vendedor extends Usuario {
                 int posicionActu= 0;
                 int numeral=1;
                 int opc;
-                boolean continuar= true;
                 
                 System.out.println("\nSe han realizado "+ vehiculosofertados.size() +" ofertas");
                 
-                while(continuar){
-                    sc.useDelimiter("\n"); 
+                do {
                     Oferta o = vehiculosofertados.get(posicionActu);
-                    
-                    System.out.println("\nOferta #"+ numeral + " de "+vehiculosofertados.size()+"\n");
-                           
-                    System.out.println(o.marca +"  "+ o.modelo +"  Precio:"+ o.precio +"\nCorreo: "+ correoU +", Precio Ofertado: "+ o.precioOfertado+"\n");
-                    if (posicionActu == 0){
+
+                    System.out.println("\nOferta #" + numeral + " de " + vehiculosofertados.size() + "\n");
+                    System.out.println(o.marca + "  " + o.modelo + "  Precio:" + o.precio + "\nCorreo: " + correoU + ", Precio Ofertado: " + o.precioOfertado + "\n");
+
+                    if (posicionActu == 0) {
                         System.out.println("1. Siguiente oferta \n2. Aceptar oferta  \nSeleccionar opcion (solo numero):");
-                        opc= sc.nextInt();
+                        opc = sc.nextInt();
                         if (opc == 2)
                             opc = 3;
-                    }else if(posicionActu == vehiculosofertados.size()-1){
+                    } else if (posicionActu == vehiculosofertados.size() - 1) {
                         System.out.println("1. Anterior oferta   \n2. Aceptar oferta  \nSeleccionar opcion (solo numero):");
-                        opc= sc.nextInt();
-                            if (opc == 1){
-                                opc = 2;
-                            }
-                            else if(opc ==2){
-                                opc = 3;
-                            }
-                    }else{
+                        opc = sc.nextInt();
+                        if (opc == 1) {
+                            opc = 2;
+                        } else if (opc == 2) {
+                            opc = 3;
+                        }
+                    } else {
                         System.out.println("1. Siguiente oferta  \n2. Anterior oferta   \n3. Aceptar oferta  \nSeleccionar opcion (solo numero):");
-                        opc= sc.nextInt();
+                        opc = sc.nextInt();
                     }
-                    switch (opc) { 
+
+                    switch (opc) {
                         case 1 -> {
-                            if(posicionActu<vehiculosofertados.size()-1){
+                            if (posicionActu < vehiculosofertados.size() - 1) {
                                 posicionActu++;
                                 numeral++;
-                            }
-                            else{
+                            } else {
                                 System.out.println("-- Estas en el ultimo vehiculo --");
-                                
                             }
                         }
                         case 2 -> {
-                            if(posicionActu>0){
+                            if (posicionActu > 0) {
                                 posicionActu--;
                                 numeral--;
-                            }
-                            else{
+                            } else {
                                 System.out.println("-- Estas en el primer vehiculo --");
                             }
                         }
                         case 3 -> {
-                            String destinatario = o.correo; //A quien le quieres escribir.
-                            String asunto = "Oferta aceptada!";    
+                            String destinatario = o.correo; // A quien le quieres escribir.
+                            String asunto = "Oferta aceptada!";
                             String cuerpo = "La oferta del carro con la placa " + o.placa + " fue aceptada";
                             enviarConGMail(destinatario, asunto, cuerpo);
-                            
-                            eliminarLineas("ofertas.txt",o.placa);
-                            eliminarLineas("vehiculo.txt",o.placa);
-                            continuar = false;
-                            System.out.println("Oferta aceptada!! ");
-                                
+
+                            eliminarLineas("ofertas.txt", o.placa);
+                            eliminarLineas("vehiculo.txt", o.placa);
+                            System.out.println("Oferta aceptada!!");
                         }
                         default -> System.out.println("opcion incorrecta");
                     }
-                }
+                } while (opc != 3);
             }else{
                 System.out.println("Clave incorrecta");
             }    

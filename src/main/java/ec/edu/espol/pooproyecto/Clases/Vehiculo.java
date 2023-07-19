@@ -24,9 +24,10 @@ public class Vehiculo {
     private String tipoCombustible;
     private String precio;
     private Vendedor vendedor;
+    private String correoVendedor;
 
     
-    public Vehiculo(String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, String precio) {
+    public Vehiculo(String placa, String marca, String modelo, String tipoMotor, String anio, String recorrido, String color, String tipoCombustible, String precio, String correoVendedor) {
         this.placa = placa;
         this.marca = marca;
         this.modelo = modelo;
@@ -36,6 +37,7 @@ public class Vehiculo {
         this.color = color;
         this.tipoCombustible = tipoCombustible;
         this.precio = precio;
+        this.correoVendedor=correoVendedor;
     }
     public Vehiculo(){  
         this.placa = "";
@@ -73,9 +75,9 @@ public class Vehiculo {
                 String type = d[0]; //Sacamos en el archivo tipo de vehiculo
                 Vehiculo v; //Inicializamos aqui para acortar lineas
                 switch (type) {
-                    case "AUTO" -> v = new Auto(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11]);
-                    case "CAMIONETA" -> v = new Camioneta(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11],d[12]);
-                    case "MOTO" -> v = new Moto(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9]); //Este es moto
+                    case "AUTO" -> v = new Auto(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11],d[12]);
+                    case "CAMIONETA" -> v = new Camioneta(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11],d[12],d[13]);
+                    case "MOTO" -> v = new Moto(d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10]); //Este es moto
                     default -> {
                         continue; //Ignoramos lineas de tipos desconocidos
                     }
@@ -126,5 +128,8 @@ public class Vehiculo {
     public Vendedor getVendedor() {
         return vendedor;
     }
+
+
+    
      
 }
